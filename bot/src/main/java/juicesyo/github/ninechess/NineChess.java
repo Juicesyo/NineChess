@@ -76,7 +76,7 @@ public class NineChess {
                             PluginMain.INSTANCE.setNext(sender.getId());
                         }
                     }
-                    if (MyChess.size() == 8 && YourChess.size() == 8 && !stage.equals("move")) {
+                    if (MyChess.size() == 9 && YourChess.size() == 9 && !stage.equals("move")) {
                         stage = "move";
                         group.sendMessage("进入移动棋子阶段，请输入[A]-[B]来移动。");
                     }
@@ -110,11 +110,17 @@ public class NineChess {
                             }
 
                             Redraw();
-                            if (AllChess.isEmpty()) {
-                                MyChess.addAll(YourChess);
-                                AllChess = MyChess;
-                                MyChess.removeAll(YourChess);
+
+                            /*
+                            * 整合所有棋子以便于重绘棋盘
+                             */
+                            if (!AllChess.isEmpty()){
+                                AllChess.clear();
                             }
+                            MyChess.addAll(YourChess);
+                            AllChess.addAll(MyChess);
+                            MyChess.removeAll(YourChess);
+
 
                             X_Y_Graphics.setColor(Color.BLACK);
 
@@ -276,7 +282,7 @@ public class NineChess {
 
         if (id==0){
             //Collections.sort(MyChess);
-            if (MyChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||MyChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||MyChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))){
+            if (MyChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||MyChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||MyChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))||MyChess.containsAll(Arrays.asList(_site[9],_site[10],_site[11]))){
                 result = true;
             }else {
                 for (int i = 0; i <= 2; i++) {
@@ -290,7 +296,7 @@ public class NineChess {
         }
         if (id==1){
             //Collections.sort(YourChess);
-            if (YourChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||YourChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||YourChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))){
+            if (YourChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||YourChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||YourChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))||YourChess.containsAll(Arrays.asList(_site[9],_site[10],_site[11]))){
                 result = true;
             }else {
                 for (int i = 0; i <= 2; i++) {
@@ -319,6 +325,13 @@ public class NineChess {
         if(Past.equals(Now)) {
             if (Past_Site + 1 == Now_Site || Past_Site - 1 == Now_Site) {
                 result = true;
+            }else {
+                if (Past_Site == 1 && Now_Site==8){
+                    result = true;
+                }
+                if (Past_Site == 8 && Now_Site==1){
+                    result = true;
+                }
             }
         }else {
             Past = Past.replace("A","1").replace("C","1").replace("B","2");
@@ -348,6 +361,7 @@ public class NineChess {
         AllChess.clear();
         inputStream.close();
         stage = "chess";
+        PluginMain.INSTANCE.setNum(0);
         PluginMain.INSTANCE.setNext(null);
     }
 }
