@@ -23,25 +23,23 @@ object PluginMain : KotlinPlugin(
     )
 ) {
     var next : Long? = -1
+    var num = 0 //统计次数
     override fun onEnable() {
         logger.info { "Juice's Games loaded." }
         var matchList = arrayListOf<Long>()
         var ncState = arrayListOf<String>()
         var me = String()
         var you = String()
-        var num = 0 //统计次数
 
         suspend fun process(contact: Contact, group: Group, msg: Message) {
-            if (contact.id == me.toLong() && next == me.toLong()) {
-                next = you.toLong()
-                group.sendImage(NineChess.Main(group, msg.contentToString(), 0,contact))
-                num += 1
-            }
-            if (contact.id == you.toLong() && next == you.toLong()) {
-                next = me.toLong()
-                group.sendImage(NineChess.Main(group, msg.contentToString(), 1,contact))
-                num += 1
-            }
+           if (contact.id == me.toLong() && next == me.toLong()) {
+               next = you.toLong()
+               group.sendImage(NineChess.Main(group, msg.contentToString(), 0, contact))
+           }
+           if (contact.id == you.toLong() && next == you.toLong()) {
+               next = me.toLong()
+               group.sendImage(NineChess.Main(group, msg.contentToString(), 1, contact))
+           }
         }
 
         this.globalEventChannel().subscribeAlways<GroupMessageEvent> {
@@ -49,9 +47,9 @@ object PluginMain : KotlinPlugin(
             //this.group.sendImage(NineChess.main(message.content,group))
             //NineChess.inputStream.close()
 
-            if (sender.id=="315294716".toLong()&&message.contentEquals("test")){
+           /* if (sender.id=="315294716".toLong()&&message.contentEquals("test")){
                 this.group.sendMessage("NineChess:${NineChess.MyChess}\nYourChess:${NineChess.YourChess}\nAllChess:${NineChess.AllChess}\nnext:${next}")
-            }
+            }*/
 
 
             if (message.contentEquals("/nc")) {
@@ -75,18 +73,33 @@ object PluginMain : KotlinPlugin(
                         val scope = CoroutineScope(SupervisorJob())
                         val scopedChannel = globalEventChannel().parentScope(scope) // 将协程作用域 scope 附加到这个 EventChannel
                         scopedChannel.subscribeAlways<GroupMessageEvent> {
-                            process(sender, group, message)
-                            if (sender.id==me.toLong()&&NineChess.Straight_Line(0)) {
-                                group.sendMessage("end.")
-                                group.sendMessage("$senderName,you win.")
+                            if (num>50){
+                                group.sendMessage("more than 50 steps,it ends in a draw.")
                                 scope.cancel()
-                                NineChess.Clean()
+                            }else{
+                                if(num==0) {
+                                    num+=1
+                                }else {
+                                    process(sender, group, message)
+                                }
                             }
-                            if (sender.id==you.toLong()&&NineChess.Straight_Line(1)) {
-                                group.sendMessage("end.")
-                                group.sendMessage("$senderName,you win.")
-                                NineChess.Clean()
-                                scope.cancel()
+                            if (sender.id==me.toLong()) {
+                                num+=1
+                                if (NineChess.Straight_Line(0)) {
+                                    group.sendMessage("end.")
+                                    group.sendMessage("$senderName,you win.")
+                                    scope.cancel()
+                                    NineChess.Clean()
+                                }
+                            }
+                            if (sender.id==you.toLong()) {
+                                num+=1
+                                if(NineChess.Straight_Line(1)) {
+                                    group.sendMessage("end.")
+                                    group.sendMessage("$senderName,you win.")
+                                    NineChess.Clean()
+                                    scope.cancel()
+                                }
                             }
                         }// 启动监听, 监听器协程会作为 scope 的子任务
                     }
@@ -146,18 +159,33 @@ object PluginMain : KotlinPlugin(
                     val scope = CoroutineScope(SupervisorJob())
                     val scopedChannel = globalEventChannel().parentScope(scope) // 将协程作用域 scope 附加到这个 EventChannel
                     scopedChannel.subscribeAlways<GroupMessageEvent> {
-                        process(sender, group, message)
-                        if (sender.id==me.toLong()&&NineChess.Straight_Line(0)) {
-                            group.sendMessage("end.")
-                            group.sendMessage("$senderName,you win.")
-                            NineChess.Clean()
+                        if (num>50){
+                            group.sendMessage("more than 50 steps,it ends in a draw.")
                             scope.cancel()
+                        }else{
+                            if(num==0) {
+                                num+=1
+                            }else {
+                                process(sender, group, message)
+                            }
                         }
-                        if (sender.id==you.toLong()&&NineChess.Straight_Line(1)) {
-                            group.sendMessage("end.")
-                            group.sendMessage("$senderName,you win.")
-                            NineChess.Clean()
-                            scope.cancel()
+                        if (sender.id==me.toLong()) {
+                            num+=1
+                            if (NineChess.Straight_Line(0)) {
+                                group.sendMessage("end.")
+                                group.sendMessage("$senderName,you win.")
+                                scope.cancel()
+                                NineChess.Clean()
+                            }
+                        }
+                        if (sender.id==you.toLong()) {
+                            num+=1
+                            if(NineChess.Straight_Line(1)) {
+                                group.sendMessage("end.")
+                                group.sendMessage("$senderName,you win.")
+                                NineChess.Clean()
+                                scope.cancel()
+                            }
                         }
                     } // 启动监听, 监听器协程会作为 scope 的子任务
 
