@@ -266,23 +266,38 @@ public class NineChess {
                         "5","6","7",
                         "7","8","1"
                 };
+        String[] _site =
+                {
+                        "A2","B2","C2",
+                        "A4","B4","C4",
+                        "A6","B6","C6",
+                        "A8","B8","C8"
+                };
 
         if (id==0){
-            Collections.sort(MyChess);
-            for (int i = 0; i<=2;i++) {
-                for (int n = 1; n <= 4; n++) {
-                    if (MyChess.containsAll(Arrays.asList(start[i] + site[3 * n - 3], start[i] + site[3 * n - 2], start[i] + site[3 * n - 1]))) {
-                        result = true;
+            //Collections.sort(MyChess);
+            if (MyChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||MyChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||MyChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))){
+                result = true;
+            }else {
+                for (int i = 0; i <= 2; i++) {
+                    for (int n = 1; n <= 4; n++) {
+                        if (MyChess.containsAll(Arrays.asList(start[i] + site[3 * n - 3], start[i] + site[3 * n - 2], start[i] + site[3 * n - 1]))) {
+                            result = true;
+                        }
                     }
                 }
             }
         }
         if (id==1){
-            Collections.sort(YourChess);
-            for (int i = 0; i<=2;i++) {
-                for (int n = 1; n <= 4; n++) {
-                    if (MyChess.containsAll(Arrays.asList(start[i] + site[3 * n - 3], start[i] + site[3 * n - 2], start[i] + site[3 * n - 1]))) {
-                        result = true;
+            //Collections.sort(YourChess);
+            if (YourChess.containsAll(Arrays.asList(_site[0],_site[1],_site[2]))||YourChess.containsAll(Arrays.asList(_site[3],_site[4],_site[5]))||YourChess.containsAll(Arrays.asList(_site[6],_site[7],_site[8]))){
+                result = true;
+            }else {
+                for (int i = 0; i <= 2; i++) {
+                    for (int n = 1; n <= 4; n++) {
+                        if (YourChess.containsAll(Arrays.asList(start[i] + site[3 * n - 3], start[i] + site[3 * n - 2], start[i] + site[3 * n - 1]))) {
+                            result = true;
+                        }
                     }
                 }
             }
