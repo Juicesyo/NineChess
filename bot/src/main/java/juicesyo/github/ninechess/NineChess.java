@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class NineChess {
     public static InputStream inputStream;
@@ -178,17 +179,18 @@ public class NineChess {
 //type:site在MyChess时为0，site在YourChess时为1；主要用来判断棋子位置是否被对方占有
     public static boolean Inspect(String msg,int type){
         boolean result = false;
-        if ( msg.startsWith("A") || msg.startsWith("B")  || msg.startsWith("C")){
+        if (msg.startsWith("A") || msg.startsWith("B")  || msg.startsWith("C")){
             msgStart = msg.substring(0, 1);
             msgEnd = msg.substring(1, 2);
-
-
-            if (Integer.parseInt(msgEnd) < 9 && Integer.parseInt(msgEnd) > 0) {
-                if (type == 0 && !YourChess.contains(msgStart + msgEnd)) {
-                    result = true;
-                }
-                if (type == 1 && !MyChess.contains(msgStart + msgEnd)) {
-                    result = true;
+            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+            if (pattern.matcher(msgEnd).matches()) {
+                if (Integer.parseInt(msgEnd) < 9 && Integer.parseInt(msgEnd) > 0) {
+                    if (type == 0 && !YourChess.contains(msgStart + msgEnd)) {
+                        result = true;
+                    }
+                    if (type == 1 && !MyChess.contains(msgStart + msgEnd)) {
+                        result = true;
+                    }
                 }
             }
         }

@@ -73,6 +73,18 @@ object PluginMain : KotlinPlugin(
                         val scope = CoroutineScope(SupervisorJob())
                         val scopedChannel = globalEventChannel().parentScope(scope) // 将协程作用域 scope 附加到这个 EventChannel
                         scopedChannel.subscribeAlways<GroupMessageEvent> {
+                            if (sender.id==me.toLong()&&message.contentToString()=="exit") {
+                                group.sendMessage("end.")
+                                group.sendMessage("$me give up.\n$you,you win.")
+                                scope.cancel()
+                                NineChess.Clean()
+                            }
+                            if (sender.id==you.toLong()&&message.contentToString()=="exit") {
+                                group.sendMessage("end.")
+                                group.sendMessage("$you give up.\n$me,you win.")
+                                scope.cancel()
+                                NineChess.Clean()
+                            }
                             if (num>50){
                                 group.sendMessage("more than 50 steps,it ends in a draw.")
                                 scope.cancel()
@@ -159,6 +171,18 @@ object PluginMain : KotlinPlugin(
                     val scope = CoroutineScope(SupervisorJob())
                     val scopedChannel = globalEventChannel().parentScope(scope) // 将协程作用域 scope 附加到这个 EventChannel
                     scopedChannel.subscribeAlways<GroupMessageEvent> {
+                        if (sender.id==me.toLong()&&message.contentToString()=="exit") {
+                            group.sendMessage("end.")
+                            group.sendMessage("$me give up.\n$you,you win.")
+                            scope.cancel()
+                            NineChess.Clean()
+                        }
+                        if (sender.id==you.toLong()&&message.contentToString()=="exit") {
+                            group.sendMessage("end.")
+                            group.sendMessage("$you give up.\n$me,you win.")
+                            scope.cancel()
+                            NineChess.Clean()
+                        }
                         if (num>50){
                             group.sendMessage("more than 50 steps,it ends in a draw.")
                             scope.cancel()
