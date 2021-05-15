@@ -18,7 +18,7 @@
 * 特点：  
 ·双方50步后仍未分出胜负自动判为平局
 # 棋盘
-![image](https://i.loli.net/2021/04/24/cu6n8sarkUxQW7O.png)
+![image](https://menhera.ga/picture/Chess%20board.png)
 # 最后
 因能力有限，不能保证在任何情况下完美使用。  
 若有任何问题欢迎使用issue反馈问题，或加入交流群：581103186
